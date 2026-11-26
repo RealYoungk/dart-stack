@@ -41,5 +41,13 @@
     "commit": "ff6d472ee66dbed566c4500edee460c94fde0a02",
     "archive": "https://codeload.github.com/flutter/agent-plugins/tar.gz/ff6d472ee66dbed566c4500edee460c94fde0a02",
     "skills": "dart-add-unit-test,dart-build-cli-app,dart-collect-coverage,dart-fix-runtime-errors,dart-generate-test-mocks,dart-migrate-to-checks-package,dart-resolve-package-conflicts,dart-run-static-analysis,dart-setup-ffi-assets,dart-use-doc-examples,dart-use-ffigen,dart-use-path-package,dart-use-pattern-matching,dart-use-primary-constructors,dart-write-documentation,flutter-add-integration-test,flutter-add-widget-preview,flutter-add-widget-test,flutter-apply-architecture-best-practices,flutter-build-responsive-layout,flutter-fix-layout-issues,flutter-implement-json-serialization,flutter-setup-declarative-routing,flutter-setup-localization,flutter-use-http-package"
+  },
+  "a2ui": {
+    "source": "github",
+    "repo": "a2ui-project/a2ui",
+    "commit": "36725eee042da90c526f469f94246f96e16fdc35",
+    "archive": "https://codeload.github.com/a2ui-project/a2ui/tar.gz/36725eee042da90c526f469f94246f96e16fdc35",
+    "paths": "skills/a2ui,.agents/skills/a2ui-migration",
+    "skills": "a2ui,a2ui-migration"
   }
 }

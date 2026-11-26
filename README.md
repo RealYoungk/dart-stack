@@ -11,6 +11,7 @@ An **unofficial** Claude Code plugin that bundles the **official** agent skills 
 | Jaspr | [`jaspr`](https://pub.dev/packages/jaspr) on pub.dev | 5 | MIT |
 | Flutter Scene | [`flutter_scene`](https://pub.dev/packages/flutter_scene) on pub.dev | 6 | MIT |
 | Patrol | [`patrol`](https://pub.dev/packages/patrol) on pub.dev | 4 | Apache-2.0 |
+| A2UI | [a2ui-project/a2ui](https://github.com/a2ui-project/a2ui) (`main`): `skills/a2ui`, `.agents/skills/a2ui-migration` | 2 | Apache-2.0 |
 
 It also starts the Dart MCP server (`dart mcp-server`), the same way the official Flutter plugin does.
 
@@ -34,7 +35,7 @@ To receive updates automatically, turn on auto-update for the `dart-stack` marke
 ## How updates work
 
 1. A GitHub Actions workflow runs `dart tool/sync.dart` every day at 18:00 UTC.
-2. The script reads the latest stable version of each pub.dev package and the latest `main` commit of `flutter/agent-plugins`.
+2. The script reads the latest stable version of each pub.dev package and the latest `main` commit of each GitHub source.
 3. If any upstream changed, it replaces `skills/` and `licenses/`, writes `sources.lock.json`, and bumps the plugin patch version.
 4. The workflow commits the result. Claude Code picks up the new version on its next marketplace update.
 
@@ -47,8 +48,8 @@ dart tool/sync.dart --check  # report only, exit 1 if outdated
 
 ## Licensing
 
-Every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, and Patrol authors.
+Every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, and A2UI authors.
 
 The sync script, manifests, and workflow in this repository are MIT licensed.
 
-This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, shad, Jaspr, Flutter Scene, or Patrol.
+This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, or A2UI.

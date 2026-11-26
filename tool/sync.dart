@@ -3,7 +3,8 @@
 // Sources:
 // - pub.dev packages (latest stable): serverpod, relic, shad, jaspr,
 //   flutter_scene, patrol
-// - GitHub flutter/agent-plugins (main): Flutter and Dart skills
+// - GitHub repositories (default branch head), see [githubSources]:
+//   flutter/agent-plugins for Flutter and Dart, a2ui-project/a2ui for A2UI
 //
 // Skills are copied verbatim. Each upstream LICENSE goes to licenses/.
 // When any upstream version changes, the plugin patch version is bumped.
@@ -21,8 +22,24 @@ const pubPackages = [
   'flutter_scene',
   'patrol',
 ];
-const githubRepo = 'flutter/agent-plugins';
-const githubBranch = 'main';
+
+/// GitHub sources. `paths` lists skill folders to take; null takes every
+/// folder under `skills/`. Only user-facing skills are listed: repository
+/// maintenance skills (PR hygiene, triage bots, releases) are left out.
+const githubSources = [
+  (
+    key: 'flutter-agent-plugins',
+    repo: 'flutter/agent-plugins',
+    branch: 'main',
+    paths: null,
+  ),
+  (
+    key: 'a2ui',
+    repo: 'a2ui-project/a2ui',
+    branch: 'main',
+    paths: ['skills/a2ui', '.agents/skills/a2ui-migration'],
+  ),
+];
 
 final root = File(Platform.script.toFilePath()).parent.parent;
 final skillsDir = Directory('${root.path}/skills');
@@ -47,15 +64,20 @@ Future<void> main(List<String> args) async {
         'archive': latest['archive_url'] as String,
       };
     }
-    final commit = await _getJson(
-        'https://api.github.com/repos/$githubRepo/commits/$githubBranch',
-        github: true);
-    lock['flutter-agent-plugins'] = {
-      'source': 'github',
-      'repo': githubRepo,
-      'commit': commit['sha'] as String,
-      'archive': 'https://codeload.github.com/$githubRepo/tar.gz/${commit['sha']}',
-    };
+    for (final g in githubSources) {
+      final commit = await _getJson(
+        'https://api.github.com/repos/${g.repo}/commits/${g.branch}',
+        github: true,
+      );
+      lock[g.key] = {
+        'source': 'github',
+        'repo': g.repo,
+        'commit': commit['sha'] as String,
+        'archive':
+            'https://codeload.github.com/${g.repo}/tar.gz/${commit['sha']}',
+        if (g.paths != null) 'paths': g.paths!.join(','),
+      };
+    }
 
     final oldLock = lockFile.existsSync()
         ? (jsonDecode(lockFile.readAsStringSync()) as Map<String, dynamic>)
@@ -91,9 +113,23 @@ Future<void> main(List<String> args) async {
       final base = e.value['source'] == 'github'
           ? dir.listSync().whereType<Directory>().single
           : dir;
-      final src = Directory('${base.path}/skills');
-      if (!src.existsSync()) throw '${e.key} has no skills/ folder';
-      for (final s in src.listSync().whereType<Directory>()) {
+      final List<Directory> picked;
+      final paths = e.value['paths'];
+      if (paths != null) {
+        picked = [
+          for (final p in paths.split(',')) Directory('${base.path}/$p'),
+        ];
+        for (final d in picked) {
+          if (!File('${d.path}/SKILL.md').existsSync()) {
+            throw '${e.key}: ${d.path.substring(base.path.length + 1)} has no SKILL.md';
+          }
+        }
+      } else {
+        final src = Directory('${base.path}/skills');
+        if (!src.existsSync()) throw '${e.key} has no skills/ folder';
+        picked = src.listSync().whereType<Directory>().toList();
+      }
+      for (final s in picked) {
         final name = s.uri.pathSegments.where((p) => p.isNotEmpty).last;
         if (!File('${s.path}/SKILL.md').existsSync()) continue;
         if (owner.containsKey(name)) {
@@ -118,16 +154,18 @@ Future<void> main(List<String> args) async {
       for (final e in lock.entries)
         e.key: {
           ...e.value,
-          'skills': (owner.entries
-                  .where((o) => o.value == e.key)
-                  .map((o) => o.key)
-                  .toList()
-                ..sort())
-              .join(','),
-        }
+          'skills':
+              (owner.entries
+                      .where((o) => o.value == e.key)
+                      .map((o) => o.key)
+                      .toList()
+                    ..sort())
+                  .join(','),
+        },
     };
     lockFile.writeAsStringSync(
-        '${const JsonEncoder.withIndent('  ').convert(lockOut)}\n');
+      '${const JsonEncoder.withIndent('  ').convert(lockOut)}\n',
+    );
 
     final version = _bumpPluginVersion();
     stdout.writeln('Synced ${owner.length} skills. Plugin version $version.');
@@ -141,32 +179,38 @@ Future<void> main(List<String> args) async {
 
 String _versionsOf(Map<String, dynamic> lock) {
   final keys = lock.keys.toList()..sort();
-  return keys.map((k) {
-    final v = lock[k] as Map;
-    return '$k=${v['version'] ?? v['commit']}';
-  }).join(';');
+  return keys
+      .map((k) {
+        final v = lock[k] as Map;
+        return '$k=${v['version'] ?? v['commit']}:${v['paths'] ?? ''}';
+      })
+      .join(';');
 }
 
 String _bumpPluginVersion() {
-  final json = jsonDecode(pluginFile.readAsStringSync()) as Map<String, dynamic>;
+  final json =
+      jsonDecode(pluginFile.readAsStringSync()) as Map<String, dynamic>;
   final parts = (json['version'] as String).split('.').map(int.parse).toList();
   parts[2]++;
   final version = parts.join('.');
   json['version'] = version;
   pluginFile.writeAsStringSync(
-      '${const JsonEncoder.withIndent('  ').convert(json)}\n');
+    '${const JsonEncoder.withIndent('  ').convert(json)}\n',
+  );
   return version;
 }
 
 void _setOutput(String key, String value) {
   final path = Platform.environment['GITHUB_OUTPUT'];
-  if (path != null) File(path).writeAsStringSync('$key=$value\n', mode: FileMode.append);
+  if (path != null)
+    File(path).writeAsStringSync('$key=$value\n', mode: FileMode.append);
 }
 
 Future<HttpClientResponse> _get(String url, {bool github = false}) async {
   final req = await http.getUrl(Uri.parse(url));
   final token = Platform.environment['GITHUB_TOKEN'];
-  if (github && token != null) req.headers.set('Authorization', 'Bearer $token');
+  if (github && token != null)
+    req.headers.set('Authorization', 'Bearer $token');
   final res = await req.close();
   if (res.statusCode != 200) throw 'GET $url -> ${res.statusCode}';
   return res;
@@ -174,7 +218,8 @@ Future<HttpClientResponse> _get(String url, {bool github = false}) async {
 
 Future<Map<String, dynamic>> _getJson(String url, {bool github = false}) async {
   final res = await _get(url, github: github);
-  return jsonDecode(await res.transform(utf8.decoder).join()) as Map<String, dynamic>;
+  return jsonDecode(await res.transform(utf8.decoder).join())
+      as Map<String, dynamic>;
 }
 
 Future<void> _download(String url, File to) async {
