@@ -19,9 +19,9 @@
   },
   "jaspr": {
     "source": "pub.dev",
-    "version": "0.23.5",
-    "archive": "https://pub.dev/api/archives/jaspr-0.23.5.tar.gz",
-    "skills": "jaspr-convert-html,jaspr-fundamentals,jaspr-js-interop,jaspr-pre-rendering-and-hydration,jaspr-styling"
+    "version": "0.24.0-beta.2",
+    "archive": "https://pub.dev/api/archives/jaspr-0.24.0-beta.2.tar.gz",
+    "skills": "jaspr-best-practices,jaspr-content,jaspr-convert-html,jaspr-fundamentals,jaspr-js-interop,jaspr-pre-rendering-and-hydration,jaspr-styling,jaspr-web-design-guidelines"
   },
   "flutter_scene": {
     "source": "pub.dev",
@@ -52,7 +52,7 @@
   },
   "dart-stack": {
     "source": "local",
-    "version": "de242cc40e4b034e",
+    "version": "29c017390aa5bbae",
     "skills": "dart-stack-new-project"
   }
 }

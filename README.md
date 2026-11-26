@@ -8,7 +8,7 @@ An **unofficial** Claude Code plugin that bundles the **official** agent skills 
 | Serverpod | [`serverpod`](https://pub.dev/packages/serverpod) on pub.dev | 21 | SSPL-1.0 |
 | Relic | [`relic`](https://pub.dev/packages/relic) on pub.dev | 7 | BSD-3-Clause |
 | shad | [`shad`](https://pub.dev/packages/shad) on pub.dev | 1 | MIT |
-| Jaspr | [`jaspr`](https://pub.dev/packages/jaspr) on pub.dev | 5 | MIT |
+| Jaspr | [`jaspr`](https://pub.dev/packages/jaspr) on pub.dev (newest prerelease, see below) | 8 | MIT |
 | Flutter Scene | [`flutter_scene`](https://pub.dev/packages/flutter_scene) on pub.dev | 6 | MIT |
 | Patrol | [`patrol`](https://pub.dev/packages/patrol) on pub.dev | 4 | Apache-2.0 |
 | A2UI | [a2ui-project/a2ui](https://github.com/a2ui-project/a2ui) (`main`): `skills/a2ui`, `.agents/skills/a2ui-migration` | 2 | Apache-2.0 |
@@ -41,7 +41,7 @@ To receive updates automatically, turn on auto-update for the `dart-stack` marke
 ## How updates work
 
 1. A GitHub Actions workflow runs `dart tool/sync.dart` every day at 18:00 UTC.
-2. The script reads the latest stable version of each pub.dev package and the latest `main` commit of each GitHub source.
+2. The script reads the latest stable version of each pub.dev package and the latest `main` commit of each GitHub source. Jaspr is the exception: it takes the newest version, prerelease included, because the stable 0.23.x line does not resolve on Dart 3.14 and projects use the 0.24 prerelease. When a stable release passes the prerelease, the script takes that stable release.
 3. If any upstream or `local-skills/` changed, it rebuilds `skills/` and `licenses/`, writes `sources.lock.json`, and bumps the plugin patch version.
 4. The workflow commits the result. Claude Code picks up the new version on its next marketplace update.
 

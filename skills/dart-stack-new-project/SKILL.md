@@ -53,6 +53,7 @@ jaspr create <name>_web --mode static --routing multi-page --no-pub-get
 - Join it to the workspace: add `resolution: workspace` under `environment:` in its `pubspec.yaml`, add `- <name>_web` to the root `workspace:` list, then run `dart pub get` at the root.
 - Known break (checked 2026-11-26): Jaspr 0.23.x templates fail version solving on Dart 3.14 (`jaspr_builder` pins `analyzer ^12`, `build_web_compilers >=4.8.11` needs `analyzer >=13.3`). The fix is the 0.24 prerelease line for all four: `jaspr: ^0.24.0-beta.2`, `jaspr_builder: ^0.24.0-beta.2`, `jaspr_router: ^0.10.0-beta.2`, `build_web_compilers: ^4.8.11`. If version solving fails some other way, check pub.dev for the newest prerelease of each package before downgrading anything.
 - Verify with `dart run build_runner build` and `dart analyze` in the package.
+- This plugin ships the Jaspr skills of the newest prerelease, so they match the 0.24 line. Read `jaspr-fundamentals` first; `jaspr-content` covers docs and blog sites.
 
 For a few plain pages served by the Serverpod server itself, `serverpod create --website` and the `serverpod-webserver` skill are lighter than a Jaspr package.
 

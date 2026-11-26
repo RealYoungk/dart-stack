@@ -2,7 +2,8 @@
 //
 // Sources:
 // - pub.dev packages (latest stable): serverpod, relic, shad, jaspr,
-//   flutter_scene, patrol
+//   flutter_scene, patrol. Packages in [prereleasePackages] take the newest
+//   version instead, prerelease included.
 // - GitHub repositories (default branch head), see [githubSources]:
 //   flutter/agent-plugins for Flutter and Dart, a2ui-project/a2ui for A2UI
 //
@@ -22,6 +23,11 @@ const pubPackages = [
   'flutter_scene',
   'patrol',
 ];
+
+/// Packages whose newest version, prerelease included, is taken instead of
+/// the latest stable. Jaspr: the stable 0.23.x line does not resolve on
+/// Dart 3.14, so projects use the 0.24 prerelease and need its skills.
+const prereleasePackages = {'jaspr'};
 
 /// GitHub sources. `paths` lists skill folders to take; null takes every
 /// folder under `skills/`. Only user-facing skills are listed: repository
@@ -61,7 +67,13 @@ Future<void> main(List<String> args) async {
     final lock = <String, Map<String, String>>{};
     for (final name in pubPackages) {
       final info = await _getJson('https://pub.dev/api/packages/$name');
-      final latest = info['latest'] as Map<String, dynamic>;
+      var latest = info['latest'] as Map<String, dynamic>;
+      if (prereleasePackages.contains(name)) {
+        // pub.dev lists versions in ascending order.
+        latest = (info['versions'] as List)
+            .cast<Map<String, dynamic>>()
+            .lastWhere((v) => v['retracted'] != true);
+      }
       lock[name] = {
         'source': 'pub.dev',
         'version': latest['version'] as String,
