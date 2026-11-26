@@ -11,6 +11,12 @@
     "archive": "https://pub.dev/api/archives/relic-2.0.1.tar.gz",
     "skills": "relic-app-setup,relic-middleware,relic-request-response,relic-routing,relic-shelf-migration,relic-static-files,relic-websockets"
   },
+  "shad": {
+    "source": "pub.dev",
+    "version": "1.0.2",
+    "archive": "https://pub.dev/api/archives/shad-1.0.2.tar.gz",
+    "skills": "shad-overview"
+  },
   "jaspr": {
     "source": "pub.dev",
     "version": "0.23.5",

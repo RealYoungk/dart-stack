@@ -8,7 +8,7 @@
     {
       "name": "dart-stack",
       "source": "./",
-      "description": "Official agent skills for Flutter, Dart, Serverpod, Jaspr, and Flutter Scene in one plugin, synced daily from upstream.",
+      "description": "Official agent skills for Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, and Patrol in one plugin, synced daily from upstream.",
       "category": "development"
     }
   ]

@@ -1,8 +1,8 @@
 {
   "name": "dart-stack",
   "displayName": "Dart Stack",
-  "version": "0.1.1",
-  "description": "Unofficial bundle of the official agent skills for Flutter, Dart, Serverpod, Jaspr, and Flutter Scene, synced daily from upstream, plus the Dart MCP server.",
+  "version": "0.1.2",
+  "description": "Unofficial bundle of the official agent skills for Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, and Patrol, synced daily from upstream, plus the Dart MCP server.",
   "author": {
     "name": "RealYoungk",
     "url": "https://github.com/RealYoungk"
@@ -13,8 +13,11 @@
     "dart",
     "flutter",
     "serverpod",
+    "relic",
+    "shad",
     "jaspr",
-    "flutter_scene"
+    "flutter_scene",
+    "patrol"
   ],
   "mcpServers": {
     "dart-mcp-server": {
