@@ -1,6 +1,6 @@
 ---
 name: dart-stack-new-project
-description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - with go_router and ChangeNotifier-based MVVM, and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Not for work inside a project that is already set up.
+description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - with go_router and ChangeNotifier-based MVVM, and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Also use when preparing a release or adding analytics, crash reporting, session replay, or monitoring (GA4, Crashlytics, Clarity, Firebase Performance). Not for other work inside a project that is already set up.
 ---
 
 # New project setup
@@ -113,3 +113,35 @@ Traps seen in testing (Serverpod 4.1.2, macOS, 2026-11-26):
 - The runner is a background process that can keep the agent's shell waiting when its output is piped (`| tail`). Run runner commands with `</dev/null >runner.out 2>&1` and read the file, or run them in the background.
 - A very long project path makes the server's build hook fail with `install_name_tool: ... larger updated load commands do not fit`. Move the project to a shorter path; it is not a code problem.
 - When another Serverpod runner on the machine holds the default ports, the new one binds random ports. `serverpod runner status` prints the real ones.
+
+## 6. Before release: monitoring
+
+Not part of a new project. Do this when the user prepares a release or asks for analytics, crash reports, or monitoring. Each tool covers one area, so they do not overlap; do not add a second tool for an area that is already covered (for example PostHog next to GA4 and Clarity, or Sentry next to Crashlytics on mobile).
+
+| Area | Tool | Cost |
+|---|---|---|
+| App usage analytics | GA4 (`firebase_analytics`) | Free |
+| App session replay, heatmaps | Microsoft Clarity (`clarity_flutter`, Android and iOS only) | Free |
+| App crashes and errors | Firebase Crashlytics (`firebase_crashlytics`, no web) | Free |
+| App performance | Firebase Performance (`firebase_performance`) | Free |
+| Web app errors (Flutter web, Jaspr) | Sentry (`sentry_flutter`), only when a web app ships | Free plan: 1 user, 5,000 errors per month |
+| Server logs, failed and slow calls | Serverpod logging and Insights (`serverpod-logging`) | Built in |
+| Server uptime | Serverpod `/readyz` (`serverpod-health-checks`) and one external uptime monitor | Built in |
+| Server APM (traces, metrics) | Skip until needed; then `otel_serverpod` (third party) with Grafana Cloud | Free tier |
+
+The user must do these, because they need the user's own accounts:
+
+- Create the Firebase project and run `firebase login`.
+- Create the Clarity project and give you its project ID (Clarity dashboard, Settings).
+- Update the app's privacy policy and the store privacy forms (App Store privacy labels, Google Play data safety) for the data these tools collect.
+
+Then, in the Flutter app:
+
+1. `flutter pub add firebase_core firebase_analytics firebase_crashlytics firebase_performance clarity_flutter`. Add the packages before step 2, so that FlutterFire adds the Crashlytics and Performance Gradle plugins.
+2. `dart pub global activate flutterfire_cli`, then `flutterfire configure` in the app folder. It writes `lib/firebase_options.dart`.
+3. In `main()`: call `WidgetsFlutterBinding.ensureInitialized()`, then `await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`.
+4. Send errors to Crashlytics: `FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;` and `PlatformDispatcher.instance.onError = (e, s) { FirebaseCrashlytics.instance.recordError(e, s, fatal: true); return true; };`. Skip both on web.
+5. Track screens: add `FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)` to `GoRouter(observers: [...])`. Shell branches need the observer on their own `StatefulShellBranch(observers: [...])` too.
+6. Wrap the app: `runApp(ClarityWidget(app: MyApp(), clarityConfig: ClarityConfig(projectId: '<id>')))` on Android and iOS only (skip it when `kIsWeb`). Wrap sensitive widgets (passwords, payment, personal data) in `ClarityMask`.
+7. After sign-in, log the user to all of them with the same opaque ID (the Serverpod user ID, never an email): `FirebaseAnalytics.instance.setUserId`, `FirebaseCrashlytics.instance.setUserIdentifier`, `Clarity.setCustomUserId`.
+8. Verify on a release build: force a test crash, open a few screens, and check each dashboard. Data can take minutes to appear.

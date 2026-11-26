@@ -19,7 +19,7 @@ It also starts the Dart MCP server (`dart mcp-server`), the same way the officia
 
 No upstream covers starting a project, so this repository adds one skill of its own, kept in [`local-skills/`](local-skills):
 
-- **`dart-stack-new-project`**: sets up a new project with the official CLIs in the layout Serverpod recommends (one pub workspace), sets up the Flutter app with go_router and the MVVM layout from the official Flutter architecture skill (plain `ChangeNotifier`, no state management package), adds shad, Flutter Scene, A2UI, or Patrol, and removes the skill copies that `serverpod create` and `flutter_scene:init` put in the project, since this plugin already ships them. It holds commands and order only; every package detail is left to that package's own skill.
+- **`dart-stack-new-project`**: sets up a new project with the official CLIs in the layout Serverpod recommends (one pub workspace), sets up the Flutter app with go_router and the MVVM layout from the official Flutter architecture skill (plain `ChangeNotifier`, no state management package), adds shad, Flutter Scene, A2UI, or Patrol, adds release monitoring with one free tool per area (GA4, Clarity, Crashlytics, Firebase Performance, Serverpod logs), and removes the skill copies that `serverpod create` and `flutter_scene:init` put in the project, since this plugin already ships them. It holds commands and order only; every package detail is left to that package's own skill.
 
 Exact upstream versions and the skills each one provides are in [`sources.lock.json`](sources.lock.json).
 
