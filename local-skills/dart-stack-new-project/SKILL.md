@@ -1,6 +1,6 @@
 ---
 name: dart-stack-new-project
-description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Not for work inside a project that is already set up.
+description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - with go_router and ChangeNotifier-based MVVM, and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Not for work inside a project that is already set up.
 ---
 
 # New project setup
@@ -57,9 +57,27 @@ jaspr create <name>_web --mode static --routing multi-page --no-pub-get
 
 For a few plain pages served by the Serverpod server itself, `serverpod create --website` and the `serverpod-webserver` skill are lighter than a Jaspr package.
 
-## 3. Add packages to the Flutter app
+## 3. Set up the Flutter app
 
 Run these in `<name>_flutter` (or the Flutter app's folder).
+
+### Base (always)
+
+1. `flutter pub add go_router`, then set it up as `flutter-setup-declarative-routing` says. With shad, use `ShadApp.router(routerConfig: ...)`. Routing rules:
+   - Keep the whole route tree in one `lib/routing/router.dart`. Declare navigator keys there as top-level finals, never inside `build`.
+   - Guard sign-in in the top-level `redirect`, never in screens. With Serverpod auth, pass `refreshListenable: client.auth.authInfoListenable`, read `client.auth.isAuthenticated` in `redirect`, and return `null` when the user is already on the target route, or it loops.
+   - Tabs whose scroll position or input must survive a switch use `StatefulShellRoute.indexedStack`. Sign-in, onboarding, and full-screen viewers sit outside the shell on the root navigator.
+   - `context.go` for tab and top-level moves, `context.push` only when the user must come back to the same screen.
+2. Lay out `lib/` as `flutter-apply-architecture-best-practices` says: `data/repositories/`, and `ui/features/<feature>/view_models/` and `views/`.
+3. Manage state with Flutter only: ViewModels extend `ChangeNotifier`, views listen with `ListenableBuilder`, and Repositories go into ViewModels through the constructor. Create them once near `main()` and pass them down.
+
+Do not add these unless the user asks:
+
+- A state management package (Riverpod, bloc, provider, GetX).
+- `freezed`, `json_serializable`, `http`, or `dio` in a Serverpod app. The generated client is the Service layer and `.spy.yaml` models are already immutable with `copyWith` and JSON support; Repositories wrap `client.<endpoint>.<method>()` calls. In a Flutter-only app, follow `flutter-use-http-package` and `flutter-implement-json-serialization`.
+- Localization. Add it with `flutter-setup-localization` only when the app needs more than one language.
+
+### Optional packages
 
 | Package | Commands | Then read |
 |---|---|---|
