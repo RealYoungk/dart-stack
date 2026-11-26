@@ -5,6 +5,12 @@
     "archive": "https://pub.dev/api/archives/serverpod-4.1.2.tar.gz",
     "skills": "serverpod-auth,serverpod-caching,serverpod-configuration,serverpod-database,serverpod-deployment,serverpod-endpoints,serverpod-file-uploads,serverpod-flutter-frontend,serverpod-health-checks,serverpod-logging,serverpod-migrations,serverpod-models,serverpod-modules,serverpod-overview,serverpod-scheduling,serverpod-server-events,serverpod-sessions,serverpod-streams,serverpod-testing,serverpod-upgrading,serverpod-webserver"
   },
+  "relic": {
+    "source": "pub.dev",
+    "version": "2.0.1",
+    "archive": "https://pub.dev/api/archives/relic-2.0.1.tar.gz",
+    "skills": "relic-app-setup,relic-middleware,relic-request-response,relic-routing,relic-shelf-migration,relic-static-files,relic-websockets"
+  },
   "jaspr": {
     "source": "pub.dev",
     "version": "0.23.5",
@@ -16,6 +22,12 @@
     "version": "0.24.6",
     "archive": "https://pub.dev/api/archives/flutter_scene-0.24.6.tar.gz",
     "skills": "flutter_scene-idioms,flutter_scene-kit,flutter_scene-looks,flutter_scene-performance,flutter_scene-procedural,flutter_scene-verification-loop"
+  },
+  "patrol": {
+    "source": "pub.dev",
+    "version": "4.12.0",
+    "archive": "https://pub.dev/api/archives/patrol-4.12.0.tar.gz",
+    "skills": "patrol-migrate-from-maestro,patrol-setup,patrol-test-architecture,patrol-write-test"
   },
   "flutter-agent-plugins": {
     "source": "github",

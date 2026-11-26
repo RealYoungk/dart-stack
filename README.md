@@ -6,8 +6,10 @@ An **unofficial** Claude Code plugin that bundles the **official** agent skills 
 |---|---|---|---|
 | Flutter and Dart | [flutter/agent-plugins](https://github.com/flutter/agent-plugins) (`main`) | 25 | BSD-3-Clause |
 | Serverpod | [`serverpod`](https://pub.dev/packages/serverpod) on pub.dev | 21 | SSPL-1.0 |
+| Relic | [`relic`](https://pub.dev/packages/relic) on pub.dev | 7 | BSD-3-Clause |
 | Jaspr | [`jaspr`](https://pub.dev/packages/jaspr) on pub.dev | 5 | MIT |
 | Flutter Scene | [`flutter_scene`](https://pub.dev/packages/flutter_scene) on pub.dev | 6 | MIT |
+| Patrol | [`patrol`](https://pub.dev/packages/patrol) on pub.dev | 4 | Apache-2.0 |
 
 It also starts the Dart MCP server (`dart mcp-server`), the same way the official Flutter plugin does.
 
@@ -44,8 +46,8 @@ dart tool/sync.dart --check  # report only, exit 1 if outdated
 
 ## Licensing
 
-Every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Jaspr, and Flutter Scene authors.
+Every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, Jaspr, Flutter Scene, and Patrol authors.
 
 The sync script, manifests, and workflow in this repository are MIT licensed.
 
-This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Jaspr, or Flutter Scene.
+This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, Jaspr, Flutter Scene, or Patrol.

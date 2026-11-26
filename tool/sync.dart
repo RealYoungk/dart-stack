@@ -1,7 +1,8 @@
 // Pulls the official agent skills from each upstream into skills/.
 //
 // Sources:
-// - pub.dev packages (latest stable): serverpod, jaspr, flutter_scene
+// - pub.dev packages (latest stable): serverpod, relic, jaspr, flutter_scene,
+//   patrol
 // - GitHub flutter/agent-plugins (main): Flutter and Dart skills
 //
 // Skills are copied verbatim. Each upstream LICENSE goes to licenses/.
@@ -12,7 +13,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-const pubPackages = ['serverpod', 'jaspr', 'flutter_scene'];
+const pubPackages = ['serverpod', 'relic', 'jaspr', 'flutter_scene', 'patrol'];
 const githubRepo = 'flutter/agent-plugins';
 const githubBranch = 'main';
 
