@@ -230,7 +230,7 @@ Future<String> _hashDir(Directory dir) async {
     add(utf8.encode(f.path.substring(dir.path.length)));
     add(await f.readAsBytes());
   }
-  return h.toUnsigned(64).toRadixString(16).padLeft(16, '0');
+  return BigInt.from(h).toUnsigned(64).toRadixString(16).padLeft(16, '0');
 }
 
 String _bumpPluginVersion() {
