@@ -15,6 +15,12 @@ An **unofficial** Claude Code plugin that bundles the **official** agent skills 
 
 It also starts the Dart MCP server (`dart mcp-server`), the same way the official Flutter plugin does.
 
+### The one skill written here
+
+No upstream covers starting a project, so this repository adds one skill of its own, kept in [`local-skills/`](local-skills):
+
+- **`dart-stack-new-project`**: sets up a new project with the official CLIs in the layout Serverpod recommends (one pub workspace), adds shad, Flutter Scene, A2UI, or Patrol, and removes the skill copies that `serverpod create` and `flutter_scene:init` put in the project, since this plugin already ships them. It holds commands and order only; every package detail is left to that package's own skill.
+
 Exact upstream versions and the skills each one provides are in [`sources.lock.json`](sources.lock.json).
 
 ## Install
@@ -36,7 +42,7 @@ To receive updates automatically, turn on auto-update for the `dart-stack` marke
 
 1. A GitHub Actions workflow runs `dart tool/sync.dart` every day at 18:00 UTC.
 2. The script reads the latest stable version of each pub.dev package and the latest `main` commit of each GitHub source.
-3. If any upstream changed, it replaces `skills/` and `licenses/`, writes `sources.lock.json`, and bumps the plugin patch version.
+3. If any upstream or `local-skills/` changed, it rebuilds `skills/` and `licenses/`, writes `sources.lock.json`, and bumps the plugin patch version.
 4. The workflow commits the result. Claude Code picks up the new version on its next marketplace update.
 
 Run it locally:
@@ -48,8 +54,8 @@ dart tool/sync.dart --check  # report only, exit 1 if outdated
 
 ## Licensing
 
-Every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, and A2UI authors.
+Except `skills/dart-stack-new-project/` (built from `local-skills/`), every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, and A2UI authors.
 
-The sync script, manifests, and workflow in this repository are MIT licensed.
+The sync script, manifests, workflow, and `local-skills/` in this repository are MIT licensed.
 
 This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, or A2UI.

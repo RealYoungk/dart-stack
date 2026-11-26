@@ -49,5 +49,10 @@
     "archive": "https://codeload.github.com/a2ui-project/a2ui/tar.gz/36725eee042da90c526f469f94246f96e16fdc35",
     "paths": "skills/a2ui,.agents/skills/a2ui-migration",
     "skills": "a2ui,a2ui-migration"
+  },
+  "dart-stack": {
+    "source": "local",
+    "version": "-21dbd33bf1b4fcb2",
+    "skills": "dart-stack-new-project"
   }
 }

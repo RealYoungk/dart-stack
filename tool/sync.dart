@@ -42,6 +42,10 @@ const githubSources = [
 ];
 
 final root = File(Platform.script.toFilePath()).parent.parent;
+
+/// This repository's own skills. They are merged into skills/ on every sync
+/// and are the only skills not copied from an upstream.
+final localSkillsDir = Directory('${root.path}/local-skills');
 final skillsDir = Directory('${root.path}/skills');
 final licensesDir = Directory('${root.path}/licenses');
 final lockFile = File('${root.path}/sources.lock.json');
@@ -78,6 +82,12 @@ Future<void> main(List<String> args) async {
         if (g.paths != null) 'paths': g.paths!.join(','),
       };
     }
+    if (localSkillsDir.existsSync()) {
+      lock['dart-stack'] = {
+        'source': 'local',
+        'version': await _hashDir(localSkillsDir),
+      };
+    }
 
     final oldLock = lockFile.existsSync()
         ? (jsonDecode(lockFile.readAsStringSync()) as Map<String, dynamic>)
@@ -104,6 +114,18 @@ Future<void> main(List<String> args) async {
     final stagedLicenses = Directory('${tmp.path}/licenses')..createSync();
     final owner = <String, String>{}; // skill name -> source
     for (final e in lock.entries) {
+      if (e.value['source'] == 'local') {
+        for (final s in localSkillsDir.listSync().whereType<Directory>()) {
+          final name = s.uri.pathSegments.where((p) => p.isNotEmpty).last;
+          if (!File('${s.path}/SKILL.md').existsSync()) continue;
+          if (owner.containsKey(name)) {
+            throw 'Skill name clash: $name in ${owner[name]} and ${e.key}';
+          }
+          owner[name] = e.key;
+          await _copyDir(s, Directory('${staged.path}/$name'));
+        }
+        continue; // Covered by this repository's own LICENSE.
+      }
       final dir = Directory('${tmp.path}/src-${e.key}')..createSync();
       final archive = File('${tmp.path}/${e.key}.tar.gz');
       await _download(e.value['archive']!, archive);
@@ -185,6 +207,30 @@ String _versionsOf(Map<String, dynamic> lock) {
         return '$k=${v['version'] ?? v['commit']}:${v['paths'] ?? ''}';
       })
       .join(';');
+}
+
+/// FNV-1a over every file's relative path and bytes, in sorted order.
+Future<String> _hashDir(Directory dir) async {
+  final files =
+      dir
+          .listSync(recursive: true, followLinks: false)
+          .whereType<File>()
+          .where((f) => !f.path.endsWith('.DS_Store'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+  var h = 0xcbf29ce484222325;
+  void add(List<int> bytes) {
+    for (final b in bytes) {
+      h ^= b;
+      h = (h * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF;
+    }
+  }
+
+  for (final f in files) {
+    add(utf8.encode(f.path.substring(dir.path.length)));
+    add(await f.readAsBytes());
+  }
+  return h.toUnsigned(64).toRadixString(16).padLeft(16, '0');
 }
 
 String _bumpPluginVersion() {
