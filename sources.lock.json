@@ -1,0 +1,27 @@
+{
+  "serverpod": {
+    "source": "pub.dev",
+    "version": "4.1.2",
+    "archive": "https://pub.dev/api/archives/serverpod-4.1.2.tar.gz",
+    "skills": "serverpod-auth,serverpod-caching,serverpod-configuration,serverpod-database,serverpod-deployment,serverpod-endpoints,serverpod-file-uploads,serverpod-flutter-frontend,serverpod-health-checks,serverpod-logging,serverpod-migrations,serverpod-models,serverpod-modules,serverpod-overview,serverpod-scheduling,serverpod-server-events,serverpod-sessions,serverpod-streams,serverpod-testing,serverpod-upgrading,serverpod-webserver"
+  },
+  "jaspr": {
+    "source": "pub.dev",
+    "version": "0.23.5",
+    "archive": "https://pub.dev/api/archives/jaspr-0.23.5.tar.gz",
+    "skills": "jaspr-convert-html,jaspr-fundamentals,jaspr-js-interop,jaspr-pre-rendering-and-hydration,jaspr-styling"
+  },
+  "flutter_scene": {
+    "source": "pub.dev",
+    "version": "0.24.6",
+    "archive": "https://pub.dev/api/archives/flutter_scene-0.24.6.tar.gz",
+    "skills": "flutter_scene-idioms,flutter_scene-kit,flutter_scene-looks,flutter_scene-performance,flutter_scene-procedural,flutter_scene-verification-loop"
+  },
+  "flutter-agent-plugins": {
+    "source": "github",
+    "repo": "flutter/agent-plugins",
+    "commit": "ff6d472ee66dbed566c4500edee460c94fde0a02",
+    "archive": "https://codeload.github.com/flutter/agent-plugins/tar.gz/ff6d472ee66dbed566c4500edee460c94fde0a02",
+    "skills": "dart-add-unit-test,dart-build-cli-app,dart-collect-coverage,dart-fix-runtime-errors,dart-generate-test-mocks,dart-migrate-to-checks-package,dart-resolve-package-conflicts,dart-run-static-analysis,dart-setup-ffi-assets,dart-use-doc-examples,dart-use-ffigen,dart-use-path-package,dart-use-pattern-matching,dart-use-primary-constructors,dart-write-documentation,flutter-add-integration-test,flutter-add-widget-preview,flutter-add-widget-test,flutter-apply-architecture-best-practices,flutter-build-responsive-layout,flutter-fix-layout-issues,flutter-implement-json-serialization,flutter-setup-declarative-routing,flutter-setup-localization,flutter-use-http-package"
+  }
+}

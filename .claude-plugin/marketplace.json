@@ -1,0 +1,15 @@
+{
+  "name": "dart-stack",
+  "owner": {
+    "name": "RealYoungk"
+  },
+  "description": "Unofficial bundle of official Dart ecosystem agent skills",
+  "plugins": [
+    {
+      "name": "dart-stack",
+      "source": "./",
+      "description": "Official agent skills for Flutter, Dart, Serverpod, Jaspr, and Flutter Scene in one plugin, synced daily from upstream.",
+      "category": "development"
+    }
+  ]
+}
