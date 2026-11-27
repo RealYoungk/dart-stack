@@ -1,6 +1,6 @@
 ---
 name: dart-stack-new-project
-description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - with go_router and ChangeNotifier-based MVVM, and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Also use when preparing a release or adding analytics, crash reporting, session replay, or monitoring (GA4, Crashlytics, Clarity, Firebase Performance). Not for other work inside a project that is already set up.
+description: Set up a new Dart/Flutter project with the official CLIs, in the layout Serverpod recommends - a Serverpod backend with a Flutter app, a Flutter-only app, or a Jaspr website - with go_router and ChangeNotifier-based MVVM, or a Flame game, and add shad, Flutter Scene, A2UI, or Patrol to it for the first time. Use when the user asks to create, start, scaffold, bootstrap, or initialize a project or app, or to add one of these packages to a project that does not use it yet. Also use when preparing a release or adding analytics, crash reporting, session replay, or monitoring (GA4, Crashlytics, Clarity, Firebase Performance). Not for other work inside a project that is already set up.
 ---
 
 # New project setup
@@ -16,6 +16,8 @@ Ask only what you cannot infer from the request.
 | A backend (accounts, data, real-time) and an app | Serverpod, `fullstack` template |
 | A backend only | Serverpod, `server` template |
 | An app with no backend of its own | `flutter create` |
+| A 2D game | `flame create` (Flame). With a backend, Serverpod first, then Flame in `<name>_flutter` |
+| A 3D app or game | Flutter Scene, added in step 3 |
 | A website or docs site | Jaspr (inside the Serverpod workspace if there is one) |
 | Code reused across several Serverpod projects | Serverpod, `module` template |
 
@@ -40,6 +42,19 @@ serverpod create <name> --no-interactive --ide claude
 ```bash
 flutter create --org <reverse.domain> <name>
 ```
+
+### Flame game
+
+Install the CLI once with `dart pub global activate flame_cli`, then:
+
+```bash
+flame create <name> --org <reverse.domain> --template basics --platforms <list>
+```
+
+- Templates: `simple`, `basics` (default), `example`. `--packages flame_audio,flame_tiled` adds bridge packages. See `flame-cli` for the rest, and read `flame-best-practices` before writing game code.
+- In a Serverpod workspace, do not run `flame create`. In `<name>_flutter` run `flutter pub add flame dev:flame_test dev:flame_lint`, and point `analysis_options.yaml` at `flame_lint` as `flame-best-practices` says.
+- Version gap (checked 2026-11-27): the Flame skills come from Flame's `main` branch and are written for Flame 2 (`2.0.0-dev`). The released `flame_cli` 0.1.0 creates Flame 1.38.2 projects and has no `flame wait` or `flame status`. When a skill rule does not match the installed version, follow the installed package's API and tell the user.
+- Verify with `flutter analyze` and `flutter test` (checked: the `basics` template passes both).
 
 ### Jaspr website
 

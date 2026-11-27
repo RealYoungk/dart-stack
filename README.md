@@ -12,6 +12,7 @@ An **unofficial** Claude Code plugin that bundles the **official** agent skills 
 | Flutter Scene | [`flutter_scene`](https://pub.dev/packages/flutter_scene) on pub.dev | 6 | MIT |
 | Patrol | [`patrol`](https://pub.dev/packages/patrol) on pub.dev | 4 | Apache-2.0 |
 | A2UI | [a2ui-project/a2ui](https://github.com/a2ui-project/a2ui) (`main`): `skills/a2ui`, `.agents/skills/a2ui-migration` | 2 | Apache-2.0 |
+| Flame | [flame-engine/flame](https://github.com/flame-engine/flame) (`main`): `packages/flame/skills/*` | 2 | MIT |
 
 It also starts the Dart MCP server (`dart mcp-server`), the same way the official Flutter plugin does.
 
@@ -54,8 +55,8 @@ dart tool/sync.dart --check  # report only, exit 1 if outdated
 
 ## Licensing
 
-Except `skills/dart-stack-new-project/` (built from `local-skills/`), every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, and A2UI authors.
+Except `skills/dart-stack-new-project/` (built from `local-skills/`), every file under `skills/` is copied **verbatim** from its upstream and remains under that upstream's license. The full license texts are in [`licenses/`](licenses). This repository does not modify, relicense, or claim authorship of those skills. All credit belongs to the Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, A2UI, and Flame authors.
 
 The sync script, manifests, workflow, and `local-skills/` in this repository are MIT licensed.
 
-This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, or A2UI.
+This project is not affiliated with or endorsed by Google, the Flutter team, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, A2UI, or Flame.

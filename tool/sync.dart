@@ -5,7 +5,8 @@
 //   flutter_scene, patrol. Packages in [prereleasePackages] take the newest
 //   version instead, prerelease included.
 // - GitHub repositories (default branch head), see [githubSources]:
-//   flutter/agent-plugins for Flutter and Dart, a2ui-project/a2ui for A2UI
+//   flutter/agent-plugins for Flutter and Dart, a2ui-project/a2ui for A2UI,
+//   flame-engine/flame for Flame
 //
 // Skills are copied verbatim. Each upstream LICENSE goes to licenses/.
 // When any upstream version changes, the plugin patch version is bumped.
@@ -29,8 +30,9 @@ const pubPackages = [
 /// Dart 3.14, so projects use the 0.24 prerelease and need its skills.
 const prereleasePackages = {'jaspr'};
 
-/// GitHub sources. `paths` lists skill folders to take; null takes every
-/// folder under `skills/`. Only user-facing skills are listed: repository
+/// GitHub sources. `paths` lists skill folders to take; a path ending in
+/// `/*` takes every skill folder under it; null takes every folder under
+/// `skills/`. Only user-facing skills are listed: repository
 /// maintenance skills (PR hygiene, triage bots, releases) are left out.
 const githubSources = [
   (
@@ -44,6 +46,15 @@ const githubSources = [
     repo: 'a2ui-project/a2ui',
     branch: 'main',
     paths: ['skills/a2ui', '.agents/skills/a2ui-migration'],
+  ),
+  // Flame's skills are on main ahead of any pub.dev release (checked
+  // 2026-11-27: 1.38.2 and 2.0.0-dev.1 have none). Switch to pubPackages
+  // once a release ships them.
+  (
+    key: 'flame',
+    repo: 'flame-engine/flame',
+    branch: 'main',
+    paths: ['packages/flame/skills/*'],
   ),
 ];
 
@@ -151,8 +162,16 @@ Future<void> main(List<String> args) async {
       final paths = e.value['paths'];
       if (paths != null) {
         picked = [
-          for (final p in paths.split(',')) Directory('${base.path}/$p'),
+          for (final p in paths.split(','))
+            if (p.endsWith('/*'))
+              ...Directory('${base.path}/${p.substring(0, p.length - 2)}')
+                  .listSync()
+                  .whereType<Directory>()
+                  .where((d) => File('${d.path}/SKILL.md').existsSync())
+            else
+              Directory('${base.path}/$p'),
         ];
+        if (picked.isEmpty) throw '${e.key}: no skills found in $paths';
         for (final d in picked) {
           if (!File('${d.path}/SKILL.md').existsSync()) {
             throw '${e.key}: ${d.path.substring(base.path.length + 1)} has no SKILL.md';

@@ -50,9 +50,17 @@
     "paths": "skills/a2ui,.agents/skills/a2ui-migration",
     "skills": "a2ui,a2ui-migration"
   },
+  "flame": {
+    "source": "github",
+    "repo": "flame-engine/flame",
+    "commit": "28425cc29dc30e24e8458e83c9ec40c3dcd3e86f",
+    "archive": "https://codeload.github.com/flame-engine/flame/tar.gz/28425cc29dc30e24e8458e83c9ec40c3dcd3e86f",
+    "paths": "packages/flame/skills/*",
+    "skills": "flame-best-practices,flame-cli"
+  },
   "dart-stack": {
     "source": "local",
-    "version": "2695234efb577775",
+    "version": "f6eeebc3914f0cc3",
     "skills": "dart-stack-new-project"
   }
 }
