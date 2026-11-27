@@ -1,7 +1,7 @@
 {
   "name": "dart-stack",
   "displayName": "Dart Stack",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Unofficial bundle of the official agent skills for Flutter, Dart, Serverpod, Relic, shad, Jaspr, Flutter Scene, Patrol, A2UI, and Flame, synced daily from upstream, plus the Dart MCP server.",
   "author": {
     "name": "RealYoungk",

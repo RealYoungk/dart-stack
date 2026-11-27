@@ -53,7 +53,7 @@ flame create <name> --org <reverse.domain> --template basics --platforms <list>
 
 - Templates: `simple`, `basics` (default), `example`. `--packages flame_audio,flame_tiled` adds bridge packages. See `flame-cli` for the rest, and read `flame-best-practices` before writing game code.
 - In a Serverpod workspace, do not run `flame create`. In `<name>_flutter` run `flutter pub add flame dev:flame_test dev:flame_lint`, and point `analysis_options.yaml` at `flame_lint` as `flame-best-practices` says.
-- Version gap (checked 2026-11-27): the Flame skills come from Flame's `main` branch and are written for Flame 2 (`2.0.0-dev`). The released `flame_cli` 0.1.0 creates Flame 1.38.2 projects and has no `flame wait` or `flame status`. When a skill rule does not match the installed version, follow the installed package's API and tell the user.
+- Version gap (checked 2026-11-27): the Flame skills come from Flame's `main` branch and are written for Flame 2 (`2.0.0-dev`). The released `flame_cli` 0.1.0 creates Flame 1.38.2 projects and has no `flame wait` or `flame status`. When a skill rule does not match the installed version, follow the installed package's API and tell the user. Known difference: Flame 1.38.2 has `GameWidget.controlled(gameFactory: ...)` where the skill says `GameWidget.managed`.
 - Verify with `flutter analyze` and `flutter test` (checked: the `basics` template passes both).
 
 ### Jaspr website
@@ -100,9 +100,11 @@ Do not add these unless the user asks:
 | Flutter Scene (3D) | `flutter pub add flutter_scene` then `dart run flutter_scene:init --no-skills` | `flutter_scene-idioms` |
 | A2UI (agent-generated UI) | `flutter pub add a2ui_flutter a2ui_core` | `a2ui` |
 | Patrol (end-to-end tests) | follow the skill | `patrol-setup` |
+| Flame (2D game inside the app) | `flutter pub add flame dev:flame_test` | `flame-best-practices`, `flame-cli` |
 
 - `flutter_scene:init` is required, not optional. `--no-skills` stops it from copying its skills into the project; this plugin ships them. Run the app with `flutter run --enable-flutter-gpu` (native). Flutter Scene needs Flutter 3.47 stable or newer.
 - Never add `genui`, `flutter_genui`, or `genui_a2ui`: they are discontinued in favor of `a2ui_flutter`, `a2ui_core`, and `a2ui_agent`.
+- Flame in an existing app: show the game as one screen, a `GameWidget` on its own go_router route, and keep the game's state inside the game. Keep the app's current analysis options; add `flame_lint` only for a game-only app, since it enables rules such as `use_primary_constructors` that flag the existing code. Install `flame_cli` (`dart pub global activate flame_cli`) to run and inspect the game.
 - Pick one UI component library. shad is the default here; do not add a second one alongside it.
 
 ## 4. Remove duplicate skills
